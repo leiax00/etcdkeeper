@@ -12,13 +12,14 @@ RUN go mod tidy && go build -o etcdkeeper main.go
 FROM debian:stable-slim
 MAINTAINER "leiax00@outlook.com"
 
-ENV HOST="0.0.0.0"
-ENV PORT="8080"
+ENV EK_HOST="0.0.0.0"
+ENV EK_PORT="8080"
+ENV EK_AUTH="false"
 
 WORKDIR /app
 COPY --from=builder /code/src/etcdkeeper/etcdkeeper .
 COPY --from=builder /code/assets assets
 
-EXPOSE ${PORT}
+EXPOSE ${EK_PORT}
 
-ENTRYPOINT ./etcdkeeper -h $HOST -p $PORT
+CMD ["sh", "-c", "./etcdkeeper -h $EK_HOST -p $EK_PORT -auth $EK_AUTH"]
